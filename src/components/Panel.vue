@@ -1,10 +1,14 @@
 <template>
   <b-container class="bv-example-row">
     <b-row class="text-center">
+      <VerticalSlider>
+
+      </VerticalSlider>
       <Audio v-for="audioDevice in allAudioDevices"
              :title="audioDevice.inputName"
              :active="!audioDevice.inputMuted">
       </Audio>
+
     </b-row>
     <b-row class="text-center">
       <b-col  cols="2">
@@ -69,6 +73,7 @@
 <script setup>
 import Scene from "./Scene.vue";
 import Audio from "./Audio.vue";
+import VerticalSlider from "./VerticalSlider.vue";
 import {getAudioInputList, getSceneInfo, obs} from "../obs.lib.js";
 import {ref} from "vue";
 // function showModal() {
