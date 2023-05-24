@@ -59,7 +59,7 @@ export async function getAudioInputList() {
 }
 
 
-export function setVisible(sceneName, sceneItemId, visible) {
+export function setItemVisible(sceneName, sceneItemId, visible) {
     obs.call('SetSceneItemEnabled', {
         sceneName: sceneName,
         sceneItemId: sceneItemId,

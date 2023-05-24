@@ -1,9 +1,7 @@
 <template>
   <b-card :bg-variant="color" text-variant="white" class="text-center" @click="changeActive">
-    <slot></slot>
     <b-card-text>{{ props.title }}</b-card-text>
 
-    <slot name="footer"></slot>
   </b-card>
 </template>
 

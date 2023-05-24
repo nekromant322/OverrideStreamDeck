@@ -1,66 +1,33 @@
 <template>
   <b-container class="bv-example-row">
     <b-row class="text-center">
-      <VerticalSlider>
-
-      </VerticalSlider>
-      <Audio v-for="audioDevice in allAudioDevices"
+<!--      <Audio v-for="audioDevice in allAudioDevices"-->
+<!--             :title="audioDevice.inputName"-->
+<!--             :active="!audioDevice.inputMuted">-->
+<!--      </Audio>-->
+      <VerticalSlider v-for="audioDevice in allAudioDevices"
              :title="audioDevice.inputName"
              :active="!audioDevice.inputMuted">
-      </Audio>
+      </VerticalSlider>
 
     </b-row>
     <b-row class="text-center">
-      <b-col  cols="2">
+      <b-col cols="2">
         <Scene v-for="(scene) in allScenes"
                :title="scene.sceneName"
                :active="scene.active">
         </Scene>
-<!--        <Scene title="Sample" @counter-increase="log($event)"></Scene>-->
+        <!--        <Scene title="Sample" @counter-increase="log($event)"></Scene>-->
       </b-col>
       <b-col cols="10">
         <b-container class="bv-example-row">
           <b-row>
-            <b-col>
-              <b-card bg-variant="success" text-variant="white" header="Success" class="text-center">
-                <b-card-text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</b-card-text>
-              </b-card>
-            </b-col>
-            <b-col>
-              <b-card bg-variant="success" text-variant="white" header="Success" class="text-center">
-                <b-card-text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</b-card-text>
-              </b-card>
-            </b-col>
-            <b-col>
-              <b-card bg-variant="success" text-variant="white" header="Success" class="text-center">
-                <b-card-text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</b-card-text>
-              </b-card>
-            </b-col>
-            <b-col>
-              <b-card bg-variant="success" text-variant="white" header="Success" class="text-center">
-                <b-card-text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</b-card-text>
-              </b-card>
-            </b-col>
-            <b-col>
-              <b-card bg-variant="success" text-variant="white" header="Success" class="text-center">
-                <b-card-text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</b-card-text>
-              </b-card>
-            </b-col>
-            <b-col>
-              <b-card bg-variant="success" text-variant="white" header="Success" class="text-center">
-                <b-card-text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</b-card-text>
-              </b-card>
-            </b-col>
-            <b-col>
-              <b-card bg-variant="success" text-variant="white" header="Success" class="text-center">
-                <b-card-text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</b-card-text>
-              </b-card>
-            </b-col>
-            <b-col>
-              <b-card bg-variant="success" text-variant="white" header="Success" class="text-center">
-                <b-card-text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</b-card-text>
-              </b-card>
-            </b-col>
+            <Source v-for="source in allSources"
+                    :title="source.sourceName"
+                    :active="source.sceneItemEnabled"
+                    :itemId="source.sceneItemId"
+                    :sceneName="source.currentScene">
+            </Source>
           </b-row>
         </b-container>
       </b-col>
@@ -73,20 +40,31 @@
 <script setup>
 import Scene from "./Scene.vue";
 import Audio from "./Audio.vue";
+import Source from "./Source.vue";
 import VerticalSlider from "./VerticalSlider.vue";
-import {getAudioInputList, getSceneInfo, obs} from "../obs.lib.js";
+import {getAudioInputList, getSceneInfo, getSceneItemList, obs} from "../obs.lib.js";
 import {ref} from "vue";
 // function showModal() {
 //   this.$bvModal.msgBoxOk('Modal from @vue/compat');
 // }
 
 
-
 //SCENES
 let allScenes = ref({});
 let allAudioDevices = ref({})
-getSceneInfo().then((result) =>  {
+let allSources = ref({})
+
+getSceneInfo().then((result) => {
   let currentScene = result.currentProgramSceneName;
+  getSceneItemList(currentScene).then(result => {
+    console.log(result.sceneItems)
+    result.sceneItems = result.sceneItems.map((item) => ({
+      ...item,
+      currentScene: currentScene
+    }));
+    allSources.value = result.sceneItems
+  })
+
   let scenes = result.scenes;
   scenes.sort((a, b) => b.sceneIndex - a.sceneIndex)
   scenes = scenes.map((scene) => ({
@@ -94,6 +72,7 @@ getSceneInfo().then((result) =>  {
     active: scene.sceneName === currentScene
   }));
   allScenes.value = scenes
+
 });
 
 
@@ -103,8 +82,32 @@ function sceneChanged(event) {
     active: scene.sceneName === event.sceneName
   }))
   console.log("scene changed to " + event.sceneName)
+
+  getSceneItemList(event.sceneName).then(result => {
+    console.log(result.sceneItems)
+
+
+    result.sceneItems = result.sceneItems.map((item) => ({
+      ...item,
+      currentScene: event.sceneName
+    }));
+    allSources.value = result.sceneItems
+
+  })
+
 }
 obs.on("CurrentProgramSceneChanged", sceneChanged);
+
+
+
+function inputShowStateChanged(event) {
+  let changedSourceIndex = allSources.value.findIndex(el => el.sceneItemId === event.sceneItemId && el.currentScene === event.sceneName);
+  allSources.value[changedSourceIndex].sceneItemEnabled = event.sceneItemEnabled
+
+
+  console.log("input shown state changed  " + event.sceneName + " " + event.sceneItemId + " " + event.sceneItemEnabled)
+}
+obs.on("SceneItemEnableStateChanged", inputShowStateChanged);
 ///////////////////////////////
 // Audio
 /////////////////////////
@@ -120,19 +123,13 @@ function inputMuteStateChanged(event) {
 
   console.log("mute state changed  " + event.inputName + " " + event.inputMuted)
 }
+
 obs.on("InputMuteStateChanged", inputMuteStateChanged);
-
-
-
-
-
-
 
 
 function log(smth) {
   console.log(smth)
 }
-
 
 
 </script>
