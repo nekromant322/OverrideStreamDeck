@@ -113,8 +113,11 @@ obs.on("SceneItemEnableStateChanged", inputShowStateChanged);
 // Audio
 /////////////////////////
 
-getAudioInputList().then((audioInputs) =>
-    allAudioDevices.value = audioInputs
+getAudioInputList().then((audioInputs) => {
+      audioInputs = audioInputs.filter((audio) => !audio.inputName.startsWith("[V"))
+      allAudioDevices.value = audioInputs;
+}
+
 )
 
 function inputMuteStateChanged(event) {
