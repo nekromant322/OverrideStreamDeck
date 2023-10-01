@@ -57,7 +57,7 @@ let allSources = ref({})
 getSceneInfo().then((result) => {
   let currentScene = result.currentProgramSceneName;
   getSceneItemList(currentScene).then(result => {
-    console.log(result.sceneItems)
+    // console.log(result.sceneItems)
     result.sceneItems = result.sceneItems.map((item) => ({
       ...item,
       currentScene: currentScene
@@ -129,11 +129,5 @@ function inputMuteStateChanged(event) {
 }
 
 obs.on("InputMuteStateChanged", inputMuteStateChanged);
-
-
-function log(smth) {
-  console.log(smth)
-}
-
 
 </script>

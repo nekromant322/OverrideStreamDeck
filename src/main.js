@@ -15,7 +15,7 @@ Vue.use(BootstrapVue);
 const app = createApp(HelloBootstrap);
 app.mount('#app');
 let inputList = await getAudioInputList();
- console.log(inputList)
+ // console.log(inputList)
 
 
 //examples
