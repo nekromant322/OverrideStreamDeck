@@ -11,7 +11,7 @@ body,
 }
 .vertical-slider {
   display: flex;
-  flex-direction: column;
+  //flex-direction: column;
   align-items: center;
   justify-content: center;
 }
@@ -32,7 +32,7 @@ body,
     width: 100%;
     cursor: pointer;
     display: flex;
-    flex-direction: column;
+    //flex-direction: column;
     align-items: center;
 
     .slider-container {
@@ -42,11 +42,11 @@ body,
       position: relative;
     .name-container {
       letter-spacing: 0px;
-      writing-mode: vertical-rl;
-      text-orientation: upright;
+      //writing-mode: vertical-rl;
+      //text-orientation: upright;
       position: absolute;
       inset: 0;
-      z-index: 289;
+      //z-index: 289;
       pointer-events: none;
       user-select: none;
     }
@@ -65,21 +65,21 @@ body,
         background-color: red;
         position: absolute;
         left: 50%;
-        transform: translate(-50%, 50%);
+        //transform: translate(-50%, 50%);
       }
     }
   }
 }
 .mute-button-container {
-  background-color: #28a644; /* Green */
-  width: 15px;
+  //background-color: #28a644; /* Green */
+  width: 250px;
   border: none;
   color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
+  //padding: 15px 32px;
+  //text-align: center;
+  //text-decoration: none;
+  //display: inline-block;
+  //font-size: 16px;
 }
 
 input[type=range] {
@@ -98,11 +98,11 @@ input[type=range]:focus {
 
 input[type=range][orient=vertical]
 {
-  writing-mode: bt-lr; /* IE */
-  -webkit-appearance: slider-vertical; /* Chromium */
-  width: 20px;
-  height: 200px;
-  padding: 0 5px;
+  //writing-mode: bt-lr; /* IE */
+  //-webkit-appearance: slider-vertical; /* Chromium */
+  //width: 20px;
+  //height: 200px;
+  //padding: 0 5px;
 }
 
 .green {

@@ -67,6 +67,7 @@ getSceneInfo().then((result) => {
 
   let scenes = result.scenes;
   scenes.sort((a, b) => b.sceneIndex - a.sceneIndex)
+  scenes = scenes.filter((scene) => !scene.sceneName.startsWith("[V") && !scene.sceneName.startsWith("[Overlay"))
   scenes = scenes.map((scene) => ({
     ...scene,
     active: scene.sceneName === currentScene

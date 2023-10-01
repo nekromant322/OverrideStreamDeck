@@ -1,8 +1,8 @@
 import OBSWebSocket, {EventSubscription} from 'obs-websocket-js';
 
 export const obs = new OBSWebSocket();
-const host = "192.168.1.101"
-const pass = "pLKIdJzVBpUX7iMZ"
+const host = "127.0.0.1"
+const pass = "y0WofIyuUGs9Nf5R"
 await obs.connect('ws://' + host + ':4455', pass);
 
 export function getOBSConnection() {
